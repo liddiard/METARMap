@@ -27,9 +27,11 @@ def get_metars(airports):
             continue
         metars[airport] = {
             "flight_category": metar.find("flight_category").text,
-            "wind_speed": metar.find("wind_speed_kt").text,
-            "wind_gust": metar.find("wind_gust_kt").text
+            "wind_speed": metar.find("wind_speed_kt").text
         }
+        wind_gust = metar.find("wind_gust_kt")
+        if wind_gust:
+            metars[airport]["wind_gust"] = wind_gust
     return metars
 
 def get_tafs(airports):
