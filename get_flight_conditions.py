@@ -43,4 +43,3 @@ def get_tafs(airports):
             print(forecast.find("sky_condition").attrib["sky_cover"])
         tafs[airport] = {}
     pass
-

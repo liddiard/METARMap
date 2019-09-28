@@ -1,6 +1,8 @@
 import board
 import neopixel
 
+UPDATE_FREQUENCY = 5 # how often to update the METAR map in minutes
+
 # NeoPixel LED Configuration
 LED_COUNT		= 50					# Number of LED pixels.
 LED_PIN			= board.D18				# GPIO pin connected to the pixels (18 is PCM).
