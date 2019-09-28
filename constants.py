@@ -2,6 +2,7 @@ import board
 import neopixel
 
 UPDATE_FREQUENCY = 5 # how often to update the METAR map in minutes
+TAF_ANIMATION_DURATION = 15 # forecast animation duration in seconds
 
 # NeoPixel LED Configuration
 LED_COUNT		= 50					# Number of LED pixels.
