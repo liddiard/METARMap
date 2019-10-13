@@ -3,16 +3,21 @@ from urllib import request
 import xml.etree.ElementTree as ET
 import dateutil.parser
 
-def determine_flight_category(forecast):
-    # https://www.aviationweather.gov/taf/help?page=plot
-    visibility = forecast["visibility"]
-    sky_conditions = forecast["sky_conditions"]
+import constants
+
+
+def determine_ceiling(sky_conditions):
     ceiling = math.inf
     for layer in sky_conditions:
         sky_cover = layer["sky_cover"]
         if sky_cover == "BKN" or sky_cover == "OVC":
             ceiling = layer["cloud_base"]
             break
+    
+def determine_flight_category(forecast):
+    # https://www.aviationweather.gov/taf/help?page=plot
+    visibility = forecast["visibility"]
+    ceiling = determine_ceiling(forecast["sky_conditions"])
     if ceiling < 500 or visibility < 1:
         return "LIFR"
     elif ceiling < 1000 or visibility < 3:
@@ -22,9 +27,9 @@ def determine_flight_category(forecast):
     else:
         return "VFR"
 
-def get_weather(airports, type):
+def get_weather(airports, type, hours_before_now=2):
     # Details about parameters can be found here: https://www.aviationweather.gov/dataserver/example?datatype=metar
-    url = f"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource={type}&requestType=retrieve&format=xml&hoursBeforeNow=5&mostRecentForEachStation=true&stationString=" + ",".join([item for item in airports if item != "NULL"])
+    url = f"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource={type}&requestType=retrieve&format=xml&hoursBeforeNow={hours_before_now}&mostRecentForEachStation=true&stationString=" + ",".join([item for item in airports if item != "NULL"])
     content = request.urlopen(url).read()
     return ET.fromstring(content)
 
@@ -35,12 +40,17 @@ def get_metars(airports):
     for metar in weather.iter("METAR"):
         airport = metar.find("station_id").text
         if metar.find("flight_category") is None:
-            print("Missing flight condition for %s, skipping." % airport)
+            print("Missing flight category for %s, skipping." % airport)
             continue
         metars[airport] = {
             "flight_category": metar.find("flight_category").text,
-            "wind_speed": int(metar.find("wind_speed_kt").text)
         }
+        if (metar.find("visibility_statute_mi") is not None and float(metar.find("visibility_statute_mi").text) < 10) or (metar.find("sky_condition") and determine_ceiling(int(metar.find("sky_condition").text)) <= 5000):
+            print(metar.find("visibility_statute_mi").text)
+            metars[airport]["flight_category"] = constants.VFR_BELOW_MINIMUMS
+        wind_speed = metar.find("wind_speed_kt")
+        if wind_speed is not None:
+            metars[airport]["wind_speed"] = int(wind_speed.text)
         wind_gust = metar.find("wind_gust_kt")
         if wind_gust is not None:
             metars[airport]["wind_gust"] = int(wind_gust.text)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import random
 import neopixel
 import constants
 from get_flight_conditions import get_metars, get_tafs
@@ -37,8 +38,11 @@ def animate_taf(tafs):
             pixels[i] = color
         animation_state = get_taf_animation_state(tafs, time.time() - time_start)
 
-def animate_winds(tafs):
-    pass # define a long looped animation curve?
+def animate_winds(metars):
+    for i, airport in enumerate(airports):
+        if not airport:
+            continue
+        pixels[i]
 
 
 def update_metar_map():
@@ -50,7 +54,13 @@ def update_metar_map():
         if not airport:
             continue
         
-        flight_category = metars.get(airport, {}).get("flight_category")
+        metar = metars.get(airport)
+        if not metar:
+            print("No METAR for %s, skipping." % airport)
+            pixels[i] = constants.COLOR_OFF
+            continue
+
+        flight_category = metar.get("flight_category")
         color = constants.FLIGHT_CATEGORY_TO_COLOR_MAP.get(flight_category, constants.COLOR_OFF)
         
         if (flight_category):
@@ -62,10 +72,19 @@ def update_metar_map():
     return metars
 
 
-last_update_time = 0
+pixels.fill((255,255,255))
+pixels.show()
+time.sleep(2)
+pixels.fill(constants.COLOR_OFF)
 
+last_update_time = 0
 while True:
     if time.time() > last_update_time + constants.UPDATE_FREQUENCY * 60:
         metars = update_metar_map()
         last_update_time = time.time()
-    animate_winds(metars)
+    #animate_winds(metars)
+
+#while True:
+#    pixels[0] = (random.randint(50, 255), 0, 0)
+#    pixels.show()
+#    time.sleep(random.randint(1, 50)/1000)
