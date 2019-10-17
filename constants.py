@@ -10,7 +10,7 @@ UPDATE_FREQUENCY = 5
 # value makes the animation more likely to stay in the existing state. Value 
 # should be below 0.5, where 0.5 is equally likely to stay in the current 
 # state or transition to the other state.
-GUSTING_STICKINESS = 0.2
+GUSTING_STICKINESS = 0.1
 # Even in the highest wind conditions, don't dip brightness below this value
 MIN_FLICKER_BRIGHTNESS = 0.2
 # The minimum wind speed in knots at which point MIN_FLICKER_BRIGHTNESS can be
