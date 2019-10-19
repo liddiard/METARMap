@@ -40,7 +40,7 @@ def get_brightness(animation_state, metar):
     wind_gust = metar.get("wind_gust")
     period = animation_state.get("period")
     gusting = animation_state.get("gusting", False)
-    time_elapsed = time.time() - animation_state.get("time_since_start", math.inf)
+    time_elapsed = time.time() - animation_state.get("time_at_start", math.inf)
     # if there is no existing animation or we're past the end of one 
     # oscillation (2π / period), start a new animation
     if period is None or time_elapsed > ((2 * math.pi) / period):
@@ -65,13 +65,24 @@ def get_brightness(animation_state, metar):
                     animation_state["gusting"] = True
                 else:
                     intensity = wind_speed
-        animation_state["amplitude"] = random.uniform(0.0, min(intensity / constants.MAX_WIND_AMPLITUDE, 1 - constants.MIN_FLICKER_BRIGHTNESS))
-        animation_state["period"] = random.uniform(max(intensity, constants.MIN_WIND_PERIOD), max(intensity * constants.WIND_PERIOD_MULTIPLIER, constants.MIN_WIND_PERIOD))
-        animation_state["time_since_start"] = time.time()
+        animation_state["amplitude"] = random.uniform(
+            0.0,
+            # an amplitude above 0.5 would cause the animation curve to drop
+            # below zero, so it's a hard ceiling
+            min(intensity / (constants.MAX_WIND_AMPLITUDE * 2), 0.5)
+        )
+        animation_state["period"] = random.uniform(
+            max(intensity, constants.MIN_WIND_PERIOD),
+            max(intensity * constants.WIND_PERIOD_MULTIPLIER, constants.MIN_WIND_PERIOD)
+        )
+        animation_state["time_at_start"] = time.time()
         time_elapsed = 0
     # function is: amplitude * cos(time_elapsed * period) + (1 - amplitude)
-    # "1 - amplitude" displaces the animation curve from 1 (max brightness)
-    return animation_state["amplitude"] * math.cos(time_elapsed * animation_state["period"]) + (1 - animation_state["amplitude"])
+    # "1 - amplitude" displaces the animation curve downward from 1 (max
+    # brightness)
+    return animation_state["amplitude"] * \
+        math.cos(animation_state["period"]* time_elapsed) + \
+        (1 - animation_state["amplitude"])
         
 
 def animate_winds(animation_state, metars):
@@ -138,7 +149,7 @@ def update_metar_map(airports):
 #   "airport_code": {
 #       "period": [float],
 #       "amplitude": [float],
-#       "time_since_start": [float],
+#       "time_at_start": [float],
 #       "gusting": [boolean]
 #   }
 # }

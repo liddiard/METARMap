@@ -10,13 +10,11 @@ UPDATE_FREQUENCY = 5
 # value makes the animation more likely to stay in the existing state. Value 
 # should be below 0.5, where 0.5 is equally likely to stay in the current 
 # state or transition to the other state.
-GUSTING_STICKINESS = 0.1
-# Even in the highest wind conditions, don't dip brightness below this value
-MIN_FLICKER_BRIGHTNESS = 0.2
+GUSTING_STICKINESS = 0.15
 # The minimum wind speed in knots at which point MIN_FLICKER_BRIGHTNESS can be
 # reached. This value defines how quickly brightness will drop off as wind 
 # speed increases. A lower value corresponds to a quicker dropoff.
-MAX_WIND_AMPLITUDE = 60
+MAX_WIND_AMPLITUDE = 40
 # The minimum period (frequency) at which the brightness of an LED can flicker
 MIN_WIND_PERIOD = 4
 # How much the flicker frequency can increase from its minimum frequency
