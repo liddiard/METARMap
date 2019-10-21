@@ -72,8 +72,8 @@ def get_brightness(animation_state, metar):
             min(intensity / (constants.MAX_WIND_AMPLITUDE * 2), 0.5)
         )
         animation_state["period"] = random.uniform(
-            max(intensity, constants.MIN_WIND_PERIOD),
-            max(intensity * constants.WIND_PERIOD_MULTIPLIER, constants.MIN_WIND_PERIOD)
+            max(intensity / constants.WIND_PERIOD_VARIANCE, constants.MIN_WIND_PERIOD),
+            max(intensity * constants.WIND_PERIOD_VARIANCE, constants.MIN_WIND_PERIOD)
         )
         animation_state["time_at_start"] = time.time()
         time_elapsed = 0
@@ -107,7 +107,7 @@ def update_metar_map(airports):
     """given a list of airports, fetch METARs for them, update the LEDs 
     accordingly, and return a dictionary of the METAR data
     """
-    print("Fetching METARs at: {}".format(datetime.now()))
+    print("\nFetching METARs at: {}".format(datetime.now()))
     try:
         metars = get_metars(airports)
     # if we encounter an fetching METARs, don't crash the script, just log the

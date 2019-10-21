@@ -18,7 +18,7 @@ MAX_WIND_AMPLITUDE = 40
 # The minimum period (frequency) at which the brightness of an LED can flicker
 MIN_WIND_PERIOD = 4
 # How much the flicker frequency can increase from its minimum frequency
-WIND_PERIOD_MULTIPLIER = 2
+WIND_PERIOD_VARIANCE = 2
 
 
 # NeoPixel LED Configuration
