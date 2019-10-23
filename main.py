@@ -1,12 +1,15 @@
 import time
 import random
 import math
+import threading
 import urllib
+from statistics import median
 from datetime import datetime
 
 import neopixel
 
 import constants
+from light_sensor import get_ambient_light
 from get_flight_conditions import get_metars
 
 
@@ -141,6 +144,21 @@ def update_metar_map(airports):
 
     pixels.show()
     return metars
+
+
+def adjust_brightness():
+    light_measurements = []
+    last_update_time = time.time()
+
+    while last_update_time + 10 > time.time():
+        light_measurements.append(get_ambient_light())
+    pixels.brightness = max(-(1/20000) * median(light_measurements) + 0.5, 0.05)
+    print(pixels.brightness)
+    adjust_brightness()
+
+
+adjust_brightness_thread = threading.Thread(target=adjust_brightness)
+adjust_brightness_thread.start()
 
 
 # holds the current RGB values of the LEDs for wind animation
