@@ -5,6 +5,7 @@ import threading
 import urllib
 from statistics import median
 from datetime import datetime
+from urllib.request import URLError
 
 import neopixel
 
@@ -178,7 +179,10 @@ adjust_brightness_thread = None
 # main loop
 while True:
     if time.time() > last_update_time + constants.UPDATE_FREQUENCY * 60:
-        metars = update_metar_map(airports)
+        try:
+            metars = update_metar_map(airports)
+        except URLError as e:
+            print("Error fetching weather: {}".format(e))
         last_update_time = time.time()
         if (adjust_brightness_thread is None or
             not adjust_brightness_thread.isAlive()):
