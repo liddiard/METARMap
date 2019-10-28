@@ -23,7 +23,7 @@ I've created detailed instructions about the setup and parts used here: https://
 * Attach WS8211 LEDs to Raspberry Pi, if you are using just a few, you can connect the directly, otherwise you may need to also attach external power to the LEDs. For my purpose with 22 powered LEDs it was fine to just connect it directly. You can find [more details about wiring here](https://learn.adafruit.com/neopixels-on-raspberry-pi/raspberry-pi-wiring).
 * Test the script by running it directly (it needs to run with root permissions to access the GPIO pins):
 	* sudo python3 main.py
-* Make appropriate changes to the **airports** file for the airports you want to use and change the **metar.py** script to the correct **LED_COUNT** (including empty lines if you have LEDs in between airports that will stay off) and **LED_BRIGHTNESS** if you want to change it
+* Make appropriate changes to the **airports** file for the airports you want to use and change the **metar.py** script to the correct **LED_COUNT** (including empty lines if you have LEDs in between airports that will stay off) and **LED_INITIAL_BRIGHTNESS** if you want to change it
 
 ## TODO
 

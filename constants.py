@@ -24,7 +24,8 @@ WIND_PERIOD_VARIANCE = 2
 # NeoPixel LED Configuration
 LED_COUNT = 50 # Number of LED pixels.
 LED_PIN = board.D18 # GPIO pin connected to the pixels (18 is PCM)
-LED_BRIGHTNESS = 0.25 # Float from 0.0 (min) to 1.0 (max)
+LED_INITIAL_BRIGHTNESS = 0.25 # Float from 0.0 (min) to 1.0 (max)
+LED_MIN_BRIGHTNESS = 0.05 # Never drop below this brightness
 LED_ORDER = neopixel.RGB # Strip type and colour ordering
 
 

@@ -11,6 +11,12 @@ pin_to_circuit = 4
 
 
 def rc_time(pin_to_circuit):
+    """Determine how long it takes for the capacitor to drain, an indirect 
+    measure of ambient light. We take this approach because the Raspberry Pi's
+    GPIO pins are digital so they're either off or on. A lower value 
+    corresponds to more ambient light. More info about this approach:
+    https://pimylifeup.com/raspberry-pi-light-sensor/
+    """
     count = 0
 
     # Output on the pin for

@@ -1,4 +1,4 @@
-from urllib import request
+from urllib import request, error
 import xml.etree.ElementTree as ET
 
 import constants
@@ -22,7 +22,11 @@ def get_metars(airports):
     by airport
     """
     metars = {}
-    weather = get_weather(airports, "metars")
+    try:
+        weather = get_weather(airports, "metars")
+    except error.URLError as e:
+        print("Error fetching weather: {}".format(e))
+        return metars
     # retrieve flying conditions from the service response and store in a
     # dictionary for each airport
     for metar in weather.iter("METAR"):

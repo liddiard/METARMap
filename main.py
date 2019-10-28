@@ -18,7 +18,7 @@ pixels = neopixel.NeoPixel(
     constants.LED_PIN,
     constants.LED_COUNT,
     pixel_order=constants.LED_ORDER,
-    brightness=constants.LED_BRIGHTNESS,
+    brightness=constants.LED_INITIAL_BRIGHTNESS,
     auto_write=False
 )
 
@@ -111,13 +111,7 @@ def update_metar_map(airports):
     accordingly, and return a dictionary of the METAR data
     """
     print("\nFetching METARs at: {}".format(datetime.now()))
-    try:
-        metars = get_metars(airports)
-    # if we encounter an fetching METARs, don't crash the script, just log the
-    # error
-    except urllib.error.URLError as e:
-        print("Error fetching METARs: {}".format(e))
-        return
+    metars = get_metars(airports)
 
     # Setting LED colors based on weather conditions
     for i, airport in enumerate(airports):
@@ -152,13 +146,13 @@ def adjust_brightness():
 
     while last_update_time + 10 > time.time():
         light_measurements.append(get_ambient_light())
-    pixels.brightness = max(-(1/20000) * median(light_measurements) + 0.5, 0.05)
-    print(pixels.brightness)
+        time.sleep(1)
+    ambient_light = median(light_measurements)
+    # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
+    # https://www.desmos.com/calculator/cengxzkeqi
+    pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
+    print(ambient_light, pixels.brightness)
     adjust_brightness()
-
-
-adjust_brightness_thread = threading.Thread(target=adjust_brightness)
-adjust_brightness_thread.start()
 
 
 # holds the current RGB values of the LEDs for wind animation
@@ -179,10 +173,15 @@ for airport in airports:
 
 # time in seconds since the METAR data was last updated
 last_update_time = 0
+adjust_brightness_thread = None
 
 # main loop
 while True:
     if time.time() > last_update_time + constants.UPDATE_FREQUENCY * 60:
         metars = update_metar_map(airports)
         last_update_time = time.time()
+        if (adjust_brightness_thread is None or
+            not adjust_brightness_thread.isAlive()):
+            adjust_brightness_thread = threading.Thread(target=adjust_brightness)
+            adjust_brightness_thread.start()
     animate_winds(animation_state, metars)
