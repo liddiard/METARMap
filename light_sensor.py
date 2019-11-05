@@ -1,13 +1,15 @@
 import RPi.GPIO as GPIO
 import time
 
+import constants
+
 
 __author__ = 'Gus (Adapted from Adafruit)'
 __license__ = "GPL"
 __maintainer__ = "pimylifeup.com"
 
 # define the pin that goes to the circuit
-pin_to_circuit = 4
+pin_to_circuit = constants.PHOTORESISTOR_PIN
 
 
 def rc_time(pin_to_circuit):
