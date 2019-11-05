@@ -142,18 +142,21 @@ def update_metar_map(airports):
 
 
 def adjust_brightness():
-    light_measurements = []
-    last_update_time = time.time()
+    while True:
+        light_measurements = []
+        last_update_time = time.time()
 
-    while last_update_time + 10 > time.time():
-        light_measurements.append(get_ambient_light())
-        time.sleep(1)
-    ambient_light = median(light_measurements)
-    # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
-    # https://www.desmos.com/calculator/cengxzkeqi
-    pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
-    print(ambient_light, pixels.brightness)
-    adjust_brightness()
+        while last_update_time + 10 > time.time():
+            light_measurements.append(get_ambient_light())
+            time.sleep(1)
+        ambient_light = median(light_measurements)
+        # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
+        # https://www.desmos.com/calculator/cengxzkeqi
+        pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
+        print(ambient_light, pixels.brightness)
+
+adjust_brightness_thread = threading.Thread(target=adjust_brightness)
+adjust_brightness_thread.start()
 
 
 # holds the current RGB values of the LEDs for wind animation
@@ -174,7 +177,6 @@ for airport in airports:
 
 # time in seconds since the METAR data was last updated
 last_update_time = 0
-adjust_brightness_thread = None
 
 # main loop
 while True:
@@ -183,9 +185,5 @@ while True:
             metars = update_metar_map(airports)
         except URLError as e:
             print("Error fetching weather: {}".format(e))
-        last_update_time = time.time()
-        if (adjust_brightness_thread is None or
-            not adjust_brightness_thread.isAlive()):
-            adjust_brightness_thread = threading.Thread(target=adjust_brightness)
-            adjust_brightness_thread.start()
+        last_update_time = time.time()            
     animate_winds(animation_state, metars)
