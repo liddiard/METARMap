@@ -24,9 +24,12 @@ WIND_PERIOD_VARIANCE = 2
 # NeoPixel LED configuration
 LED_COUNT = 50 # Number of LED pixels.
 LED_PIN = board.D18 # GPIO pin connected to the pixels (18 is PCM)
-LED_INITIAL_BRIGHTNESS = 0.25 # Float from 0.0 (min) to 1.0 (max)
-LED_MIN_BRIGHTNESS = 0.05 # Never drop below this brightness
 LED_ORDER = neopixel.RGB # Strip type and colour ordering
+LED_INITIAL_BRIGHTNESS = 0.25 # Float from 0.0 (min) to 1.0 (max)
+LED_MIN_BRIGHTNESS = 0.05 # Never drop below this brightness while on
+# Ambient light reading at which to turn the map off
+# Counterintuitively, a higher number corresponds to less brightness
+MIN_AMBIENT_LIGHT = 500000
 
 
 # photoresistor configuration

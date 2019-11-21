@@ -150,9 +150,15 @@ def adjust_brightness():
             light_measurements.append(get_ambient_light())
             time.sleep(1)
         ambient_light = median(light_measurements)
-        # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
-        # https://www.desmos.com/calculator/cengxzkeqi
-        pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
+
+        # turn LEDs off if below the minimum ambient light threshold
+        # counterintuitively, a greater ambient light number means less light
+        if ambient_light > constants.MIN_AMBIENT_LIGHT:
+            pixels.brightness = 0.0
+        else:
+            # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
+            # https://www.desmos.com/calculator/cengxzkeqi
+            pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
         print(ambient_light, pixels.brightness)
 
 adjust_brightness_thread = threading.Thread(target=adjust_brightness)
