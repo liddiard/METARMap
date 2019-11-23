@@ -153,7 +153,7 @@ def adjust_brightness():
 
         # turn LEDs off if below the minimum ambient light threshold
         # counterintuitively, a greater ambient light number means less light
-        if ambient_light > constants.MIN_AMBIENT_LIGHT:
+        if ambient_light > constants.AMBIENT_LIGHT_ACTIVATION_THRESHOLD:
             pixels.brightness = 0.0
         else:
             # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4

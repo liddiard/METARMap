@@ -31,6 +31,8 @@ def rc_time(pin_to_circuit):
 
     # Count until the pin goes high
     while (GPIO.input(pin_to_circuit) == GPIO.LOW):
+        if count > constants.MIN_AMBIENT_LIGHT:
+            return count
         count += 1
 
     return count

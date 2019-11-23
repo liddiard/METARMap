@@ -27,13 +27,18 @@ LED_PIN = board.D18 # GPIO pin connected to the pixels (18 is PCM)
 LED_ORDER = neopixel.RGB # Strip type and colour ordering
 LED_INITIAL_BRIGHTNESS = 0.25 # Float from 0.0 (min) to 1.0 (max)
 LED_MIN_BRIGHTNESS = 0.05 # Never drop below this brightness while on
-# Ambient light reading at which to turn the map off
-# Counterintuitively, a higher number corresponds to less brightness
-MIN_AMBIENT_LIGHT = 500000
 
 
 # photoresistor configuration
 PHOTORESISTOR_PIN = 4
+# The minimum amount of light for the photoresistor to measure
+# We set this number so the light sensor rc_time function doesn't get stuck in
+# its `while` loop in near complete darkness
+# Counterintuitively, a higher number corresponds to lower brightness
+MIN_AMBIENT_LIGHT = 1000000
+# Ambient light reading above which the map will turn on
+AMBIENT_LIGHT_ACTIVATION_THRESHOLD = 500000
+
 
 # flight categories
 VFR = "VFR"
