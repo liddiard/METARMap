@@ -12,7 +12,7 @@ def get_weather(airports, type, hours_before_now=2):
     """
     # https://www.aviationweather.gov/dataserver/example?datatype=metar
     url = f"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource={type}&requestType=retrieve&format=xml&hoursBeforeNow={hours_before_now}&mostRecentForEachStation=true&stationString=" + ",".join([item for item in airports if item != "NULL"])
-    content = request.urlopen(url).read()
+    content = request.urlopen(url, timeout=30).read()
     return ET.fromstring(content)
 
 
