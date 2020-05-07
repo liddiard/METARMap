@@ -24,7 +24,3 @@ I've created detailed instructions about the setup and parts used here: https://
 * Test the script by running it directly (it needs to run with root permissions to access the GPIO pins):
 	* sudo python3 main.py
 * Make appropriate changes to the **airports** file for the airports you want to use and change the **metar.py** script to the correct **LED_COUNT** (including empty lines if you have LEDs in between airports that will stay off) and **LED_INITIAL_BRIGHTNESS** if you want to change it
-
-## TODO
-
-- Add photoresistor circuit for detecting ambient light. [Instructions here](https://pimylifeup.com/raspberry-pi-light-sensor/).

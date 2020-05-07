@@ -1,6 +1,15 @@
 import board
 import neopixel
 
+
+MAX_COLOR_VALUE = 255
+
+def tint(color, _tint=(60,40,20)):
+    new_color = tuple()
+    for (color_channel, tint_channel) in zip(color, _tint):
+        new_color += (min(color_channel + tint_channel, MAX_COLOR_VALUE),)
+    return new_color
+
 # application settings
 
 # How often to update the METAR map in minutes
@@ -49,11 +58,11 @@ LIFR = "LIFR"
 
 
 # flight category colors
-COLOR_VFR = (0, 170, 0) # green
-COLOR_VFR_BELOW_MINIMUMS = (0, 120, 120) # teal
-COLOR_MVFR = (0, 0, 255) # blue
-COLOR_IFR = (170, 0, 0) # red
-COLOR_LIFR = (120, 0, 120) # magenta
+COLOR_VFR = tint((0, 170, 0)) # green
+COLOR_VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
+COLOR_MVFR = tint((0, 0, 255), (20, 10, 0)) # blue
+COLOR_IFR = tint((170, 0, 0)) # red
+COLOR_LIFR = tint((120, 0, 120)) # magenta
 COLOR_OFF = (0, 0, 0)
 
 FLIGHT_CATEGORY_TO_COLOR_MAP = {
