@@ -60,8 +60,8 @@ LIFR = "LIFR"
 # flight category colors
 COLOR_VFR = tint((0, 170, 0)) # green
 COLOR_VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
-COLOR_MVFR = tint((0, 0, 255), (20, 10, 0)) # blue
-COLOR_IFR = tint((170, 0, 0)) # red
+COLOR_MVFR = tint((0, 0, 255), (15, 45, 0)) # blue
+COLOR_IFR = tint((120, 0, 0)) # red
 COLOR_LIFR = tint((120, 0, 120)) # magenta
 COLOR_OFF = (0, 0, 0)
 
