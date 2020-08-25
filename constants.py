@@ -61,7 +61,7 @@ LIFR = "LIFR"
 COLOR_VFR = tint((0, 170, 0)) # green
 COLOR_VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
 COLOR_MVFR = tint((0, 0, 255), (15, 75, 0)) # blue
-COLOR_IFR = tint((120, 0, 0), (80, 50, 15)) # red
+COLOR_IFR = tint((120, 0, 0), (80, 40, 15)) # red
 COLOR_LIFR = tint((120, 0, 120), (80, 20, 20)) # magenta
 COLOR_OFF = (0, 0, 0)
 
