@@ -5,6 +5,7 @@ import threading
 import urllib
 from statistics import median
 from datetime import datetime
+from pathlib import Path
 from urllib.request import URLError
 
 import neopixel
@@ -30,7 +31,7 @@ time.sleep(1)
 pixels.fill(constants.COLOR_OFF)
 
 # read the airports file to retrieve list of airports and use as order for LEDs
-with open("/home/pi/airports") as f:
+with open((Path(__file__).parent / "airports").resolve()) as f:
     airports = f.readlines()
 airports = [x.strip() for x in airports]
 
