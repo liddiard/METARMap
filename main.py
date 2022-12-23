@@ -142,7 +142,7 @@ def update_metar_map(airports):
     return metars
 
 
-def adjust_brightness():
+def adjust_brightness(pixels):
     while True:
         light_measurements = []
         last_update_time = time.time()
@@ -162,8 +162,10 @@ def adjust_brightness():
             pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
         print(ambient_light, pixels.brightness)
 
-adjust_brightness_thread = threading.Thread(target=adjust_brightness)
-adjust_brightness_thread.start()
+threading.Thread(
+    target=adjust_brightness,
+    args=(pixels,)
+).start()
 
 
 # holds the current RGB values of the LEDs for wind animation
