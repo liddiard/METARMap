@@ -20,7 +20,7 @@ def get_flight_category(metar):
     """Determine flight category from a TAF using the rules at:
     https://www.aviationweather.gov/taf/help?page=plot
     """
-    visibility = metar["visib"]
+    visibility = int(metar["visib"])
     ceiling = get_ceiling(metar["clouds"])
     if ceiling < 500 or visibility < 1:
         return Category.LIFR
