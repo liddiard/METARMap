@@ -1,42 +1,33 @@
 from urllib import request
-import xml.etree.ElementTree as ET
+import json
 
-import constants
-from utils import is_vfr_below_minimums
+from utils import get_flight_category
 
 
-def get_weather(airports, type, hours_before_now=2):
-    """given a list of airports and a type of weather ("metars" or "tafs"),
-    make a request to the aviation weather server, parse the response, and
-    return an XML element tree object
+def parse_weather(metars):
+    """given a list of metars, return a dict keyed by ICAO airport code,
+    containing the fields we care about for the map
     """
-    # https://www.aviationweather.gov/dataserver/example?datatype=metar
-    url = f"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource={type}&requestType=retrieve&format=xml&hoursBeforeNow={hours_before_now}&mostRecentForEachStation=true&stationString=" + ",".join([item for item in airports if item != "NULL"])
-    content = request.urlopen(url, timeout=30).read()
-    return ET.fromstring(content)
-
-
-def get_metars(airports):
-    """given a list of airports, make a request to get the METARs for them
-    and return the information we care about from each METAR in a dict keyed
-    by airport
-    """
-    metars = {}
-    weather = get_weather(airports, "metars")
+    weather = {}
     # retrieve flying conditions from the service response and store in a
     # dictionary for each airport
-    for metar in weather.iter("METAR"):
-        airport = metar.find("station_id").text
-        metars[airport] = {}
-        flight_category = metar.find("flight_category")
-        if flight_category is not None:
-            metars[airport]["flight_category"] = flight_category.text
-        if is_vfr_below_minimums(metar):
-            metars[airport]["flight_category"] = constants.VFR_BELOW_MINIMUMS
-        wind_speed = metar.find("wind_speed_kt")
-        if wind_speed is not None:
-            metars[airport]["wind_speed"] = int(wind_speed.text)
-        wind_gust = metar.find("wind_gust_kt")
-        if wind_gust is not None:
-            metars[airport]["wind_gust"] = int(wind_gust.text)
-    return metars
+    for metar in metars:
+        airport = metar["icaoId"]
+        weather[airport] = {
+            "flight_category": get_flight_category(metar),
+            "wind_speed": int(metar.get("wspd", 0)),
+            "wind_gust": int(metar.get("wgst", 0))
+
+        }
+    return weather
+
+def get_weather(airports, hours_before_now=2):
+    """given a list of airports, make a request to the aviation weather
+    server, parse the response, and return a list of METARs
+    """
+    # https://aviationweather.gov/data/api/#/Data/dataMetars
+    url = f"https://www.aviationweather.gov/cgi-bin/data/metar.php?format=json&taf=false&hours={hours_before_now}&ids=" + ",".join([item for item in airports if item != "NULL"])
+    content = request.urlopen(url, timeout=30).read()
+    return parse_weather(json.loads(content))
+
+

@@ -2,7 +2,6 @@ import time
 import random
 import math
 import threading
-import urllib
 from statistics import median
 from datetime import datetime
 from pathlib import Path
@@ -11,6 +10,7 @@ from urllib.request import URLError
 import neopixel
 
 import constants
+from constants import Color
 from light_sensor import get_ambient_light
 from get_flight_conditions import get_metars
 
@@ -28,7 +28,7 @@ pixels = neopixel.NeoPixel(
 pixels.fill((255,255,255))
 pixels.show()
 time.sleep(1)
-pixels.fill(constants.COLOR_OFF)
+pixels.fill(Color.OFF)
 
 # read the airports file to retrieve list of airports and use as order for LEDs
 with open((Path(__file__).parent / "airports").resolve()) as f:
@@ -101,7 +101,7 @@ def animate_winds(animation_state, metars):
             continue
 
         flight_category = metar.get("flight_category")
-        color = constants.FLIGHT_CATEGORY_TO_COLOR_MAP.get(flight_category, constants.COLOR_OFF)
+        color = constants.FLIGHT_CATEGORY_TO_COLOR_MAP.get(flight_category, Color.OFF)
         brightness = get_brightness(animation_state[airport], metar)
         # multiply each color value by the current brightness (between 0 and 1)
         pixels[i] = tuple(map(lambda x: int(brightness * x), color))
@@ -125,11 +125,11 @@ def update_metar_map(airports):
 
         if not metar:
             print("No METAR for {}; skipping".format(airport))
-            pixels[i] = constants.COLOR_OFF
+            pixels[i] = Color.OFF
             continue
 
         flight_category = metar.get("flight_category")
-        color = constants.FLIGHT_CATEGORY_TO_COLOR_MAP.get(flight_category, constants.COLOR_OFF)
+        color = constants.FLIGHT_CATEGORY_TO_COLOR_MAP.get(flight_category, Color.OFF)
         
         if flight_category is not None:
             print("Setting LED {index} for {airport} to {flight_category} {color}"\

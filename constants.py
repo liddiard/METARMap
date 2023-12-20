@@ -1,3 +1,5 @@
+from enum import Enum
+
 import board
 import neopixel
 
@@ -50,25 +52,26 @@ AMBIENT_LIGHT_ACTIVATION_THRESHOLD = 500000
 
 
 # flight categories
-VFR = "VFR"
-VFR_BELOW_MINIMUMS = "VFR_BELOW_MINIMUMS" # custom category, not official
-MVFR = "MVFR"
-IFR = "IFR"
-LIFR = "LIFR"
-
+class Category(Enum):
+    VFR = 1
+    VFR_BELOW_MINIMUMS = 2 # custom category, not official
+    MVFR = 3
+    IFR = 4
+    LIFR = 5
 
 # flight category colors
-COLOR_VFR = tint((0, 170, 0)) # green
-COLOR_VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
-COLOR_MVFR = tint((0, 0, 255), (15, 75, 0)) # blue
-COLOR_IFR = tint((120, 0, 0), (80, 40, 15)) # red
-COLOR_LIFR = tint((120, 0, 120), (80, 20, 20)) # magenta
-COLOR_OFF = (0, 0, 0)
+class Color(Enum):
+    VFR = tint((0, 170, 0)) # green
+    VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
+    MVFR = tint((0, 0, 255), (15, 75, 0)) # blue
+    IFR = tint((120, 0, 0), (80, 40, 15)) # red
+    LIFR = tint((120, 0, 120), (80, 20, 20)) # magenta
+    OFF = (0, 0, 0)
 
 FLIGHT_CATEGORY_TO_COLOR_MAP = {
-    VFR: COLOR_VFR,
-    MVFR: COLOR_MVFR,
-    IFR: COLOR_IFR,
-    LIFR: COLOR_LIFR,
-    VFR_BELOW_MINIMUMS: COLOR_VFR_BELOW_MINIMUMS
+    Category.VFR: Color.VFR,
+    Category.VFR_BELOW_MINIMUMS: Color.VFR_BELOW_MINIMUMS,
+    Category.MVFR: Color.MVFR,
+    Category.IFR: Color.IFR,
+    Category.LIFR: Color.LIFR
 }
