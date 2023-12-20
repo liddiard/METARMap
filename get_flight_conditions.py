@@ -15,9 +15,8 @@ def parse_weather(metars):
         airport = metar["icaoId"]
         weather[airport] = {
             "flight_category": get_flight_category(metar),
-            "wind_speed": int(metar.get("wspd", 0)),
-            "wind_gust": int(metar.get("wgst", 0))
-
+            "wind_speed": int(metar.get("wspd") or 0),
+            "wind_gust": int(metar.get("wgst") or 0)
         }
     return weather
 
