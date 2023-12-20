@@ -12,7 +12,7 @@ import neopixel
 import constants
 from constants import Color
 from light_sensor import get_ambient_light
-from get_flight_conditions import get_metars
+from get_flight_conditions import get_weather
 
 
 # initialize the LEDs
@@ -113,7 +113,7 @@ def update_metar_map(airports):
     accordingly, and return a dictionary of the METAR data
     """
     print("\nFetching METARs at: {}".format(datetime.now()))
-    metars = get_metars(airports)
+    metars = get_weather(airports)
 
     # Setting LED colors based on weather conditions
     for i, airport in enumerate(airports):
