@@ -59,19 +59,12 @@ class Category(Enum):
     IFR = 4
     LIFR = 5
 
-# flight category colors
-class Color(Enum):
-    VFR = tint((0, 170, 0)) # green
-    VFR_BELOW_MINIMUMS = tint((0, 120, 120)) # teal
-    MVFR = tint((0, 0, 255), (15, 75, 0)) # blue
-    IFR = tint((120, 0, 0), (80, 40, 15)) # red
-    LIFR = tint((120, 0, 120), (80, 20, 20)) # magenta
-    OFF = (0, 0, 0)
+COLOR_OFF = (0, 0, 0)
 
 FLIGHT_CATEGORY_TO_COLOR_MAP = {
-    Category.VFR: Color.VFR,
-    Category.VFR_BELOW_MINIMUMS: Color.VFR_BELOW_MINIMUMS,
-    Category.MVFR: Color.MVFR,
-    Category.IFR: Color.IFR,
-    Category.LIFR: Color.LIFR
+    Category.VFR: tint((0, 170, 0)), # green
+    Category.VFR_BELOW_MINIMUMS: tint((0, 120, 120)), # teal
+    Category.MVFR: tint((0, 0, 255), (15, 75, 0)), # blue
+    Category.IFR: tint((120, 0, 0), (80, 40, 15)), # red
+    Category.LIFR: tint((120, 0, 120), (80, 20, 20)) # magenta
 }
