@@ -159,7 +159,7 @@ def adjust_brightness(pixels):
             # pixels.brightness = -0.8 * math.log(1/10 * ambient_light) + 2.4
             # https://www.desmos.com/calculator/cengxzkeqi
             pixels.brightness = min(max(-0.2 * math.log10(ambient_light) + 0.9, constants.LED_MIN_BRIGHTNESS), 1)
-        print(ambient_light, pixels.brightness)
+        # print(ambient_light, pixels.brightness)
 
 threading.Thread(
     target=adjust_brightness,
