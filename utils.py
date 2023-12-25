@@ -20,15 +20,15 @@ def get_flight_category(metar):
     """Determine flight category from metar
     """
     visibility = metar["visib"]
-    if visibility == "10+":
-        visibility = math.inf
-    else:
-        visibility = float(visibility)
-
     # if station is malfunctioning, visibilty is None and cloud cover is an
     # empty list
     if visibility is None:
         return Category.UNKNOWN
+
+    if visibility == "10+":
+        visibility = math.inf
+    else:
+        visibility = float(visibility)
 
     ceiling = get_ceiling(metar["clouds"])
     if ceiling < 500 or visibility < 1:
